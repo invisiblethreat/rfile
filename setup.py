@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rfile",  # Replace with your own username
-    version="0.1.1",
+    version="0.2.0",
     author="Scott Walsh",
     author_email="scott@invisiblethreat.ca",
     description="A package to make R installed packages somewhat portable",

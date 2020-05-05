@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
+import argparse
 import subprocess
 import os.path
 
-rRun = ["R", "--no-save", "--silent", "-e"]
+rRun = ["R", "--vanilla", "--silent", "-e"]
 rDumpCode = """
 require("remotes")
-# https://gist.github.com/tjmahr/8a1535fb7c89c4f6c59c57affaba2353
 packages <- installed.packages(
   fields = c("GithubUsername", "GithubRepo", "GithubSubdir")
 )
@@ -36,11 +36,11 @@ lapply(gh_out, write, file="Rfile", append=TRUE)
 """
 
 
-def isRfile():
+def rfileExists():
     return os.path.isfile("Rfile")
 
 
-def installPackages():
+def installPackages(mirror):
     with open("Rfile") as f:
         lines = f.readlines()
 
@@ -52,16 +52,16 @@ def installPackages():
             crans.append(pkg)
         if repo == "github":
             githubs.append(pkg)
-    installCrans(crans)
+    installCrans(mirror, crans)
     installGithub(githubs)
 
 
-def installCrans(crans):
+def installCrans(mirror, crans):
     count = 1
     lcran = len(crans)
     for cran in crans:
-        print("{}/{} Installing {}".format(count, lcran, cran), end="")
-        install = "install.packages('{}', repo = 'http://cran.us.r-project.org')".format(cran)
+        print("{:>3}/{} Installing {}".format(count, lcran, cran), end="")
+        install = "install.packages('{}', repo = '{}')".format(cran, mirror)
         run = []
         for item in rRun:
             run.append(item)
@@ -75,7 +75,7 @@ def installGithub(githubs):
     count = 1
     lgithubs = len(githubs)
     for gh in githubs:
-        print("{}/{} Installing {}".format(count, lgithubs, gh), end="")
+        print("{:>3}/{} Installing {}".format(count, lgithubs, gh), end="")
         install = "devtools::install_github('{}')".format(gh)
         run = []
         for item in rRun:
@@ -97,11 +97,18 @@ def makeRfile():
     for item in rRun:
         run.append(item)
     run.append(rDumpCode)
-    print(run)
     runExternalR(run)
 
 
-if isRfile():
-    installPackages()
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+                                 description="Generate an Rfile for your packages")
+parser.add_argument("-m", "--mirror", default="http://cran.us.r-project.org",
+                    help="Enter a mirror to use for CRAN")
+
+opts = parser.parse_args()
+
+if rfileExists():
+    print("Using {} as CRAN mirror.".format(opts.mirror))
+    installPackages(opts.mirror)
 else:
     makeRfile()
