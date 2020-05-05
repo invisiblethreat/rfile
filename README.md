@@ -32,9 +32,9 @@ I'm not in the trenches every day with R, sometimes taking breaks of months at a
 time from the language. When I arrive back, I'm often looking at previous code,
 and trying to get back up to speed as quickly as possible. If I've updated all
 of my package via `brew` in the interim, I'm going to have a bad time with
-missing packages. Having an `Rfile` that knows about all the packages that I
-previously had installed enables a quick recovery, and gets me back to stumbling
-my way through the `tidyverse` again!
+missing R packages. Having an `Rfile` that knows about all the packages that I
+previously had installed in R enables a quick recovery, and gets me back to
+stumbling my way through the `tidyverse` again!
 
 ## Current Functionality
 
