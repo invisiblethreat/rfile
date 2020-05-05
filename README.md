@@ -5,7 +5,22 @@
 ## Overview
 
 `rfile` generates an `Rfile` to make your R package set reproducable, similar to
-how `Gemfile` and `Brewfile` work.
+how `Gemfile` and `Brewfile` work. This file is text, with prefixes indicating
+the source, followed by the package name. This allows for easy versioning, and
+portability.
+
+```none
+cran askpass
+cran assertthat
+cran backports
+cran base
+...
+cran xml2
+cran xopen
+cran yaml
+cran zoo
+github bbc/bbplot
+```
 
 ## Installing `rfile`
 
@@ -52,5 +67,3 @@ portability.
 ### Install packages from an `Rfile`
 
 Run `rfile` in the same directory as the `Rfile`. That's it.
-
-
