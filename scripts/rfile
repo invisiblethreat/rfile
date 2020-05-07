@@ -4,6 +4,18 @@ import argparse
 import subprocess
 import os.path
 
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 rRun = ["R", "--vanilla", "--silent", "-e"]
 rDumpCode = """
 require("remotes")
@@ -93,16 +105,18 @@ def installCrans(mirror, crans):
     count = 1
     lcran = len(crans)
     for cran in crans:
-        print("{:>3}/{} [CRAN] Installing {}".format(count,
-                                                     lcran, cran), end="")
+        print("{:>3}/{} [CRAN] Installing {}... ".format(count,
+                                                         lcran, cran), end="")
         install = "install.packages('{}', repo = '{}')".format(cran, mirror)
         run = rRun.copy()
         run.append(install)
         out = subprocess.run(run, capture_output=True)
+        msg = " {} Done.{}".format(
+            bcolors.OKGREEN, bcolors.ENDC)
         if b'is not available' in out.stderr:
-            print(" Failed.")
-        else:
-            print(" Done.")
+            msg = " {}Failed. Not available.{}".format(
+                bcolors.FAIL, bcolors.ENDC)
+        print(msg)
         count += 1
         run.clear()
 
@@ -118,11 +132,11 @@ def installGithub(githubs):
         run = rRun.copy()
         run.append(install)
         out = subprocess.run(run, capture_output=True)
-        run.pop()
-        if b'Failed to install' in out.stderr:
-            print(" Failed.")
-        else:
-            print(" Done.")
+        msg = " {}Done.{}".format(bcolors.OKGREEN, bcolors.ENDC)
+        if b'unknown package' in out.stderr:
+            msg = " {}Failed. Unknown package.{}".format(
+                bcolors.FAIL, bcolors.ENDC)
+        print(msg)
         count += 1
         run.clear()
 
