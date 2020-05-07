@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="rfile",  # Replace with your own username
-    version="0.2.0",
+    version="0.3.0",
     author="Scott Walsh",
     author_email="scott@invisiblethreat.ca",
-    description="A package to make R installed packages somewhat portable",
+    description="A package to track and reinstall R packages from CRAN and Github",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/invisiblethreat/rfile",
