@@ -111,8 +111,7 @@ def installCrans(mirror, crans):
         run = rRun.copy()
         run.append(install)
         out = subprocess.run(run, capture_output=True)
-        msg = " {} Done.{}".format(
-            bcolors.OKGREEN, bcolors.ENDC)
+        msg = " {} Done.{}".format(bcolors.OKGREEN, bcolors.ENDC)
         if b'is not available' in out.stderr:
             msg = " {}Failed. Not available.{}".format(
                 bcolors.FAIL, bcolors.ENDC)
